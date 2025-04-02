@@ -11,7 +11,7 @@ data = {
 }
 
 df = pd.DataFrame(data)
-df.to_csv('ev_data.csv', index=False)
+df.to_csv('ev_data1.csv', index=False)
 
 
 # EDA
@@ -29,4 +29,26 @@ plt.show()
 corr = df.corr()
 sns.heatmap(corr, annot=True, cmap='coolwarm')
 plt.title('Correlation Matrix')
+plt.show()
+
+# forecasiting  using prophet
+from prophet import Prophet
+
+# Prepare data for Prophet
+forecast_df = df[['Year', 'EV_Sales']].rename(columns={'Year': 'ds', 'EV_Sales': 'y'})
+forecast_df['ds'] = pd.to_datetime(forecast_df['ds'], format='%Y')
+
+# Train model
+model = Prophet(yearly_seasonality=True)
+model.fit(forecast_df)
+
+# Predict next 5 years
+future = model.make_future_dataframe(periods=5, freq='Y')
+forecast = model.predict(future)
+
+# Plot forecast
+fig = model.plot(forecast)
+plt.title('EV Sales Forecast (Prophet Model)')
+plt.xlabel('Year')
+plt.ylabel('Sales (Millions)')
 plt.show()
