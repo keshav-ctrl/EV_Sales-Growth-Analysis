@@ -12,3 +12,21 @@ data = {
 
 df = pd.DataFrame(data)
 df.to_csv('ev_data.csv', index=False)
+
+
+# EDA
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Plot EV Sales Growth
+plt.figure(figsize=(10, 6))
+sns.lineplot(x='Year', y='EV_Sales', data=df, marker='o')
+plt.title('Global EV Sales Growth (2015-2023)')
+plt.ylabel('Sales (Millions)')
+plt.show()
+
+# Correlation Matrix
+corr = df.corr()
+sns.heatmap(corr, annot=True, cmap='coolwarm')
+plt.title('Correlation Matrix')
+plt.show()
